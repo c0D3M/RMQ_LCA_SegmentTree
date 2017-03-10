@@ -1,7 +1,9 @@
 First lets define the terms.
 
-## LCA (Lowest Common Ancestor):Given a pair of nodes , the common ancestor which is farthest from root. See Wikipedia for better explanation.
-## RMQ (Range Minimum Query) : Given an array of number , return the index which is minimum between a given pair of indices.
+## LCA (Lowest Common Ancestor):
+Given a pair of nodes , the common ancestor which is farthest from root. See [Wiki!](https://en.wikipedia.org/wiki/Lowest_common_ancestor) for better explanation.
+## RMQ (Range Minimum Query): 
+Given an array of number , return the index which is minimum between a given pair of indices.
 
 LCP problem can be converted to RMQ problem as following
 * Do [Euler Tour!](https://en.wikipedia.org/wiki/Eulerian_path) on the given tree and stores the vertex visisted in an array E. Note that size of this array will be __2n-1__ because every edge has even degree and is visited twice.
@@ -21,11 +23,15 @@ Lets see this with an example.
 LCA of node n will get converted to RMQ of 2n-1 (L array).
 
 Problem boils down to finding RMQ in L, which can be done in multiple ways.
+If LCA problem contains n nodes , RMQ problem contains 2n-1 entries (because of size of array L).
+Time complexity = \<f(n) , g(n)> ,where f(n) is preprocessing time and g(n) is lookup time.
+
 * Using Table lookup \<O(n^2), O(1)>
 * Using Sparse Table (ST) \<O(n log(n)), O(1)>
 * Using Segment Tree \<O(n), O(1)>
-* \<O(n), O(1)> Algorithm for finding RMQ on Restricted array (contains only +- 1)
+* +- RMQ \<O(n), O(1)> Algorithm for finding RMQ on Restricted array (contains only +- 1)
 
+## +- RMQ method
 Divide array L in block of size log (n) /2. Their will be 2n/log n such blocks  [ n/[log(n)/2] = 2n/log(n)
 Convert H array in to H` and further -1 -> 0 and +1 ->1
 
