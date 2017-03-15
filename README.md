@@ -25,9 +25,25 @@ LCA of node n will get converted to RMQ of 2n-1 (L array).
 Problem boils down to finding RMQ in L, which can be done in multiple ways.
 If LCA problem contains n nodes , RMQ problem contains 2n-1 entries (because of size of array L).
 Time complexity = \<f(n) , g(n)> ,where f(n) is preprocessing time and g(n) is lookup time.
+So for n nodoes of LCA , RMQ solution will be 2n-1 nodes.
 
 * Using Table lookup \<O(n^2), O(1)>
+
+This is a dynamic programming approach, where we create partial solution and then use them to build further.
+For example to generate minimum between [0,1] we find miniumum between [0,0] and [1,1] which we know.
+Recursively we keep building this lookup table.
+Time and space complexity is O(n^2).
+
 * Using Sparse Table (ST) \<O(n log(n)), O(1)>
+This is also a recursive approach but we build a lookup table in powrs of 2 starting from every index.
+For example for index 0 we do
+0,0 -> 2^0
+0,1 -> 2^1
+0,3 -> 2^2
+For lookup we find maximum block which span from start index to end index.
+Another block which span from end_index to anything after start_index but maximum.
+That will overlap and we will get over minimum.
+
 * Using Segment Tree \<O(n), O(1)>
 * +- RMQ \<O(n), O(1)> Algorithm for finding RMQ on Restricted array (contains only +- 1)
 
