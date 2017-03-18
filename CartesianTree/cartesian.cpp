@@ -6,7 +6,17 @@ typedef struct _node
 	int left;
 	int right;
 }N;
-
+int EulerTour(int A[], N T[] , int index)
+{
+	if(index==-1)
+		return -1;
+	cout << index <<" ";
+	if(EulerTour(A, T, T[index].left)!=-1)
+		cout << index<<" ";
+	if(EulerTour(A, T, T[index].right)!=-1)
+		cout << index<<" ";
+	return 0;
+}
 void inOrderTravesal(int A[], N T[] , int index)
 {
 	if(index == -1)
@@ -71,6 +81,9 @@ int main()
 	cout << "In-Order Traversal of Cartesian Tree"<<endl;
 	cout << "------------------------------------"<<endl;
 	inOrderTravesal(A, T, stack[0]);
+	cout << "Euler Tour of Cartesian Tree "<<(2*C)-1<< " entries"<<endl;
+	cout << "----------------------------"<<endl;
+	EulerTour(A, T, stack[0]);
 	//displayNodes(A, T, C);
 	return 0;
 }
