@@ -141,6 +141,19 @@ What is Cartesian Tree
 * min-Heap or Max Heap property
 * an inorder travesal yield the orignal array.
 
+This is how we can convert an array into a cartesian tree.
+![](CartesianTree/Slide1.PNG)
+![](CartesianTree/Slide2.PNG)
+![](CartesianTree/Slide3.PNG)
+![](CartesianTree/Slide4.PNG)
+![](CartesianTree/Slide5.PNG)
+![](CartesianTree/Slide6.PNG)
+![](CartesianTree/Slide7.PNG)
+![](CartesianTree/Slide8.PNG)
+![](CartesianTree/Slide9.PNG)
+![](CartesianTree/Slide10.PNG)
+![](CartesianTree/Slide11.PNG)
+
 
 
 Reference
