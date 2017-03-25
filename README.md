@@ -48,12 +48,22 @@ That will overlap and we will get over minimum.
 * +- RMQ \<O(n), O(1)> Algorithm for finding RMQ on Restricted array (contains only +- 1)
 
 ## +- RMQ method
+Divide the array E in blocks and then precompute minimum in each block.
+Blocsize is choosen as log (n) /2. This bring time & space complexity to O(n).
+Sparse table  whose time complexity is O(n logn) , replace n by log (n)/2 , we get O(n).
+For Computing table M,  since array L contains 0,1 and is divided in blocks. There can be 2<sup>blocksize</sup> possible combination.
+To build each of those combination we need a nested loop that would take blocksize<sup>2</sup>.
+
+Total time = blocksize<sup>2</sup> * 2<sup>blocksize</sup> , which is O(n) [blocksize = log (n) / 2 ] 
+
+
+![](RMQ+-1.PNG)
+![](RMQ+-2.PNG)
 
 #### RMQ to LCA
 RMQ problem can be converted to generalized RMQ problem by first converting it to LCA problem and then can be solved using above way.
 We use cartesian tree to convert RMQ to LCA
-![](RMQ+-1.PNG)
-![](RMQ+-2.PNG)
+
 
 What is Cartesian Tree
  A tree that can be build from an array which satisfy
