@@ -44,7 +44,7 @@ For lookup we find maximum block which span from start index to end index.
 Another block which span from end_index to anything after start_index but maximum.
 That will overlap and we will get over minimum.
 
-* Using Segment Tree \<O(n), O(1)>
+* Using Segment Tree \<O(n), O(log n)>
 * +- RMQ \<O(n), O(1)> Algorithm for finding RMQ on Restricted array (contains only +- 1)
 
 ## +- RMQ method
