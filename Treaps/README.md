@@ -5,7 +5,7 @@ and right subtree elelments > X.
 Also for Y all nodes in left and right subtree are less than Y.Y values are called **priority**.
 This data structure is often useful in balancing BST. If priorities are chosen randomly height of this binary search tree is **O(log N)** 
 
-![Treaps](Treaps_1.PNG "Insertion Example")
+![Treaps](images/Slide1.PNG "Insertion Example")
 
 As per Insert procedure , key point is anything you insert left subtree contain node < F and right subtree > F
 - P(F) < P(J) we cannot insert here, since K(F) < K(J), goto left subtree.
