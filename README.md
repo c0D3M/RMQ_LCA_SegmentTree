@@ -5,7 +5,7 @@ Given a pair of nodes , the common ancestor which is farthest from root. See [Wi
 ## RMQ (Range Minimum Query): 
 Given an array of number , return the index which is minimum between a given pair of indices.
 
-LCP problem can be converted to RMQ problem as following
+LCA problem can be converted to RMQ problem as following
 * Do [Euler Tour!](https://en.wikipedia.org/wiki/Eulerian_path) on the given tree and stores the vertex visisted in an array E. Note that size of this array will be __2n-1__ because every edge has even degree and is visited twice.
 * Store level of each vertex during Euler tour in an array L. Note that consecutive entry in this array will differe by +/- 1 [ because the euler path will eithe go down or up and this will only change level either by +1 or -1]. This too will be 2n-1
 * Store occurence of first occurence each vertex in E another array R. Size will be n as there are n vertices.
@@ -48,7 +48,7 @@ That will overlap and we will get over minimum.
 * +- RMQ \<O(n), O(1)> Algorithm for finding RMQ on Restricted array (contains only +- 1)
 
 ## +- RMQ method
-Divide the array E in blocks and then precompute minimum in each block.
+Divide the array L in blocks and then precompute minimum in each block.
 Blocsize is choosen as log (n) /2. This bring time & space complexity to O(n).
 Sparse table  whose time complexity is O(n logn) , replace n by log (n)/2 , we get O(n).
 For Computing table M,  since array L contains 0,1 and is divided in blocks. There can be 2<sup>blocksize</sup> possible combination.
