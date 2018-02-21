@@ -4,4 +4,6 @@ Building a segment tree **O(n)** and querying takes **O(log n)**.<br />
 Segment Tree is a powerful data structure for range searhcing problem.
 
 TODO:
-Lazy propogation 
+Lazy propogation  -Done 21/02/2018
+Persistent segment tree
+
