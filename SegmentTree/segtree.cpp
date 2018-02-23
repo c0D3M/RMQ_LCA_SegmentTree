@@ -1,48 +1,59 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
-
+#include <string.h>
 using namespace std;
+typedef long long ull;
 // Define this based on problem type , for RMQ this should be a big value, for problems sum of range this would be 0
-#define NO_OVERLAP 5000
+#define NO_OVERLAP 0
 class SegmentTree
 {
 	private:
-		vector<int> input;
-		vector<int> segmentTree; // SegTree Array
-		vector<int> lazy; 		 // Lazy	Array
-		int size; // Size of SegTree
-     	buildSegmentTree(int low, int high, int index);
-		int operation(int a, int b);// Based on problem type modify this function
+		vector<ull> input;
+		ull * segmentTree; // SegTree Array
+		ull * lazy; 		 // Lazy	Array
+		ull size; // Size of SegTree
+     	ull buildSegmentTree(ull low, ull high, ull index);
+		ull operation(ull a, ull b);// Based on problem type modify this function
 	public:
-		SegmentTree(vector<int> a);
-		int query(int i, int j, int low, int high, int index);
-		void updateRange(int idx, int value, int low, int high, int index);
-		void updateRangeMultiple(int value, int seg_start, int seg_end, int low, int high, int index);
-		void updateRangeLazy(int value, int seg_start, int seg_end, int low, int high, int index);
-		int queryLazy(int i, int j, int low, int high, int index);
+		
+		SegmentTree(vector<ull> a);
+		~SegmentTree();
+		ull query(ull i, ull j, ull low, ull high, ull index);
+		void updateRange(ull idx, ull value, ull low, ull high, ull index);
+		void updateRangeMultiple(ull value, ull seg_start, ull seg_end, ull low, ull high, ull index);
+		void updateRangeLazy(ull value, ull seg_start, ull seg_end, ull low, ull high, ull index);
+		ull queryLazy(ull i, ull j, ull low, ull high, ull index);
+		void debug();
 };
-SegmentTree::SegmentTree(vector<int> a)
+SegmentTree::SegmentTree(vector<ull> a)
 {
 	input = a;
 	// For an input array of size 'n' , segment tree would contain 2n-1 node
 	// At each level , nodes double up i.e 1, 2, 4, 8 and there would be maximum log n height
 	// Use Geometric progression = n-1 + n leaf nodes  = 2n-1
-	int x = (int)(ceil(log2(input.size()))); 
+	ull x = (ull)(ceil(log2(input.size()))); 
  
     //Maximum size of segment tree
-    int max_size = 2*(int)pow(2, x) - 1; 
-	
+    ull max_size = 2*(ull)pow(2, x) - 1; 
+	//cout << max_size<<endl;
 	size = max_size;
-	segmentTree.reserve(size);
-	lazy.reserve(size);
-	buildSegmentTree(0, a.size()-1, 0);
+	segmentTree = new ull[size];
+	lazy = new ull[size];
+	memset(segmentTree, 0, size*sizeof(ull));
+	memset(lazy, 0, size*sizeof(ull));
+	//buildSegmentTree(0, a.size()-1, 0);
 }
-int SegmentTree::operation(int a, int b)
+SegmentTree::~SegmentTree()
+{
+	delete[] segmentTree;
+	delete[] lazy;
+}
+ull SegmentTree::operation(ull a, ull b)
 {
 	// For minimum Query, modify according to problem statement
-	//return a+b;
-	return a<b?a:b;
+	return a+b;
+	//return a<b?a:b;
 }
 /*
   Recursively build Segment Tree on left and right half
@@ -51,7 +62,7 @@ int SegmentTree::operation(int a, int b)
   @high: high
   @index: current index to use for the result
 */
-int SegmentTree::buildSegmentTree(int low, int high, int index)
+ull SegmentTree::buildSegmentTree(ull low, ull high, ull index)
 {
 	if(high==low)
 	{
@@ -65,9 +76,9 @@ int SegmentTree::buildSegmentTree(int low, int high, int index)
 	   Right Child = 2i+2
 	   Parent = (i-1)/2
 	*/
-	int mid = (low + high ) /2;
-	int a = buildSegmentTree(low, mid, (2*index )+1);
-	int b = buildSegmentTree(mid+1, high, (2*index )+2);
+	ull mid = (low + high ) /2;
+	ull a = buildSegmentTree(low, mid, (2*index )+1);
+	ull b = buildSegmentTree(mid+1, high, (2*index )+2);
 	segmentTree [index] = operation(a, b);
 	return segmentTree[index];
 }
@@ -79,7 +90,7 @@ int SegmentTree::buildSegmentTree(int low, int high, int index)
 @ high: subtree high
 @ index: index in segmentTree array, Each Node will contain result of input array [low, high] operation
 */
-int SegmentTree::query(int i, int j, int low=0, int high=0, int index=0)
+ull SegmentTree::query(ull i, ull j, ull low=0, ull high=0, ull index=0)
 {
 	//Trick to detect first call and update high
 	if(!low && !high && !index)
@@ -93,9 +104,9 @@ int SegmentTree::query(int i, int j, int low=0, int high=0, int index=0)
 	// partial overlap
 	else
 	{
-		int mid = (low + high ) /2;
-		int a = query(i, j, low, mid, (2*index)+1); 
-		int b = query(i, j, mid+1, high, (2*index)+2);
+		ull mid = (low + high ) /2;
+		ull a = query(i, j, low, mid, (2*index)+1); 
+		ull b = query(i, j, mid+1, high, (2*index)+2);
 		return operation(a, b);
 	}
 }
@@ -107,7 +118,7 @@ int SegmentTree::query(int i, int j, int low=0, int high=0, int index=0)
  @high: high index for SegTree
  @index: for saving
  */
-void SegmentTree::updateRange(int idx, int value, int low=-1, int high=-1, int index=0)
+void SegmentTree::updateRange(ull idx, ull value, ull low=-1, ull high=-1, ull index=0)
 {
 	if( (low==-1) && (high==-1)) //TRick to detect first call
 		{low =0 ; high = input.size()-1;}
@@ -116,14 +127,14 @@ void SegmentTree::updateRange(int idx, int value, int low=-1, int high=-1, int i
 	else if(low<= idx && idx <=high)
 	{
 		segmentTree[index] +=  value;
-		int mid = (low + high ) /2;
+		ull mid = (low + high ) /2;
 		updateRange(idx, value, low, mid, (2*index)+1); 
 		updateRange(idx, value, mid+1, high, (2*index)+2);
 	}
 	else 
 		return ;
 }
-void SegmentTree::updateRangeMultiple(int value, int low, int high,int seg_start=-1, int seg_end=-1, int index =0)
+void SegmentTree::updateRangeMultiple(ull value, ull low, ull high,ull seg_start=-1, ull seg_end=-1, ull index =0)
 {
 	if( (seg_start==-1) && (seg_end==-1)) //TRick to detect first call
 		{seg_start =0 ; seg_end = input.size()-1;}
@@ -135,29 +146,28 @@ void SegmentTree::updateRangeMultiple(int value, int low, int high,int seg_start
 		segmentTree[index] += value;
 		return;
 	}
-	int mid = (seg_start + seg_end)/2;
+	ull mid = (seg_start + seg_end)/2;
 	updateRangeMultiple(value, low, high, seg_start, mid, 2*index+1);
 	updateRangeMultiple(value, low, high, mid+1, seg_end, 2*index+2);
 	//Now update the segmentTree
 	segmentTree[index] = segmentTree[2*index+1] + segmentTree[2*index+2];
 	
 }
-void SegmentTree::updateRangeLazy(int value, int low, int high,int seg_start=-1, int seg_end=-1, int index =0)
+void SegmentTree::updateRangeLazy(ull value, ull low, ull high,ull seg_start=-1, ull seg_end=-1, ull index =0)
 {
 	if( (seg_start==-1) && (seg_end==-1)) //TRick to detect first call
 		{seg_start =0 ; seg_end = input.size()-1;}
-		
-	if( !((seg_start <=low) && (high <= seg_end))) // Is there an overlap, if not just return ?
-		return ;
+	
+	//cout << "seg_start ="<<seg_start << " seg_end"<<seg_end<<endl;	
 		
 	// check in lazy array, if non-zero, add that value and push the value to child nodes
 	if(lazy[index])
 	{
-		segmentTree[index] += value; //Update and also push to child nodes
+		segmentTree[index] += ((seg_end-seg_start+1)*lazy[index]); //Update and also push to child nodes
 		if(seg_start!=seg_end)
 		{
-			lazy[2*index+1] = value;
-			lazy[2*index+2] = value;
+			lazy[2*index+1] += lazy[index];
+			lazy[2*index+2] += lazy[index];
 		}
 		lazy[index] =0;
 	}
@@ -168,34 +178,37 @@ void SegmentTree::updateRangeLazy(int value, int low, int high,int seg_start=-1,
 	// complete overlap i.e. segment start & end should fit in the low & high range
 	if(seg_start >= low && seg_end<= high)
 	{
-		segmentTree[index] += value;
+		segmentTree[index] += ((seg_end-seg_start+1)*value);
 		if(seg_start!=seg_end)
 		{
-			lazy[2*index+1] = value;
-			lazy[2*index+2] = value;
+			lazy[2*index+1] += value;
+			lazy[2*index+2] += value;
 		}
 		return;
 	}
 	
 	
 	// recur further only if the given range partially overlap in segment range.
-	int mid = (seg_start + seg_end ) /2;
+	ull mid = (seg_start + seg_end ) /2;
 	updateRangeLazy(value, low, high, seg_start, mid, 2*index+1);
 	updateRangeLazy(value, low, high, mid+1, seg_end, 2*index+2);
 	segmentTree[index] = operation(segmentTree[2*index+1], segmentTree[2*index+2]);
 }
-int SegmentTree::queryLazy(int low, int high, int seg_start=0, int seg_end=0, int index=0)
+ull SegmentTree::queryLazy(ull low, ull high, ull seg_start=0, ull seg_end=0, ull index=0)
 {
+	
 	//Trick to detect first call and update high
 	if(!seg_start && !seg_end && !index)
 		 seg_end = input.size()-1;
+	if ( (seg_start > seg_end) ||(seg_end < low) || (seg_start > high))
+		return NO_OVERLAP;
 	if(lazy[index])
 	{
-		segmentTree[index] += lazy[index]; //Update and also push to child nodes
+		segmentTree[index] += ((seg_end-seg_start+1)*lazy[index]); //Update and also push to child nodes
 		if(seg_start!=seg_end)
 		{
-			lazy[2*index+1] = lazy[index];
-			lazy[2*index+2] = lazy[index];
+			lazy[2*index+1] += lazy[index];
+			lazy[2*index+2] += lazy[index];
 		}
 		lazy[index] =0;
 	}
@@ -203,28 +216,66 @@ int SegmentTree::queryLazy(int low, int high, int seg_start=0, int seg_end=0, in
 	if(seg_start>= low && seg_end <=high)
 		return segmentTree[index];
 	// no overlap
-	else if ((seg_end < low) || (seg_start > high))
-		return NO_OVERLAP;
-	// partial overlap
 	else
 	{
-		int mid = (seg_start + seg_end ) /2;
-		int a = queryLazy(low, high, seg_start, mid, (2*index)+1); 
-		int b = queryLazy(low, high, mid+1, seg_end, (2*index)+2);
+		ull mid = (seg_start + seg_end ) /2;
+		ull a = queryLazy(low, high, seg_start, mid, (2*index)+1); 
+		ull b = queryLazy(low, high, mid+1, seg_end, (2*index)+2);
 		return operation(a, b);
 	}
 }
+void SegmentTree::debug()
+{
+	for (int j=0;j<size; j++)
+			cout <<segmentTree[j] <<" ";
+	cout <<endl;
+	for (int j=0;j<size; j++)
+			cout <<lazy[j] <<" ";
+	cout <<endl;
+}
 int main()
 {
-	//vector<int> a =   {2, 4, 3, 1, 6, 7, 8, 9, 1, 7};
-	vector<int> a = {9, 8, 7, -1, 5, 4, 3, 2};
-	int i=0, j=9; // RMQ query between index
+	ios::sync_with_stdio(false);
+#if 1
+	ull t;
+	cin >>t;
+	for (ull i=0; i<t;i++)
+	{
+		ull N, C;
+		cin >> N>> C;
+		vector <ull> a(N, 0);
+		class SegmentTree s(a);
+		//s.debug();
+		for (ull j =0; j<C; j++)
+		{
+			ull type, start, end , value;
+			cin >> type; 
+			if(type) // Query
+			{
+				cin >> start>>end;
+				cout << s.queryLazy(start-1, end-1)<<"\n";
+				//cout << s.query(start-1, end-1)<<endl;
+			}
+			else //update
+			{
+				cin >> start>>end>>value;
+				s.updateRangeLazy(value, start-1, end-1);
+				//s.updateRangeMultiple(value, start-1, end-1);
+				//s.debug();
+			}
+		}
+		
+	}
+#else
+	//vector<ull> a =   {2, 4, 3, 1, 6, 7, 8, 9, 1, 7};
+	vector<ull> a = {9, 8, 7, 1, 5, 4, 3, 2};
+	ull i=0, j=9; // RMQ query between index
 	
 	class SegmentTree s(a);	
 	cout << "[Segment_Tree] RMQ value is  "<< s.queryLazy(i, j) <<endl;
-	s.updateRangeLazy(-5, 0, 3);
+	s.updateRangeLazy(5, 1, 2);
 	cout << "[Segment_Tree] RMQ value is  "<< s.queryLazy(2, 2) <<endl;
-#if 0
+cout << "[Segment_Tree] RMQ value is  "<< s.queryLazy(1, 2) <<endl;
 	cout << "[Segment_Tree] RMQ value is  "<< s.query(i, j) <<endl;
 	i=7; j=9;cout << "[Segment_Tree] RMQ value is  "<< s.query(i, j) <<endl;
 	s.updateRange(2, 10);
